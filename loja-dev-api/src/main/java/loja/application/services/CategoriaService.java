@@ -48,7 +48,6 @@ public class CategoriaService implements CategoriaUC {
     }
     produtoRepositoryPort.deleteByCategoriaId(idCategoria);
     categoriaRepositoryPort.deleteById(idCategoria);
-
   }
 
   @Override

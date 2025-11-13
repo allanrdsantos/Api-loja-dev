@@ -3,7 +3,7 @@ package loja.domain.produto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import loja.domain.categoria.Categoria;
 
@@ -23,12 +23,12 @@ public class Produto {
   @Column(name = "id_produto")
   private Long id;
 
-  @NotNull
+  @NotBlank
   @Size(max = 100)
-  @Column(name = "nome")
+  @Column(name = "nome", nullable = false)
   private String nome;
 
-  @NotNull
+  @NotBlank
   @DecimalMin("0.00")
   @DecimalMax("9999999.99")
   @Column(name = "preco")
