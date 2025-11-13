@@ -1,0 +1,176 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProdutoService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">loja.application.services</a>
+</div>
+
+<h1>Coverage Summary for Class: ProdutoService (loja.application.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProdutoService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package loja.application.services;
+&nbsp;
+&nbsp;import loja.application.ports.ProdutoRepositoryPort;
+&nbsp;import loja.application.usecases.ProdutoUC;
+&nbsp;import loja.domain.produto.Produto;
+&nbsp;import loja.infrastructure.exceptions.ProdutoNotFoundException;
+&nbsp;import loja.infrastructure.inbound.record.ProdutoRecord;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class ProdutoService implements ProdutoUC {
+&nbsp;
+&nbsp;  private final ProdutoRepositoryPort produtoRepositoryPort;
+&nbsp;
+<b class="fc">&nbsp;  public ProdutoService(ProdutoRepositoryPort produtoRepositoryPort) {</b>
+<b class="fc">&nbsp;    this.produtoRepositoryPort = produtoRepositoryPort;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Produto create(ProdutoRecord produtoRecord) {
+<b class="fc">&nbsp;    Produto produto = produtoRecord.toEntity();</b>
+<b class="fc">&nbsp;    return produtoRepositoryPort.save(produto);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Produto update(ProdutoRecord produtoRecord) {
+<b class="fc">&nbsp;    Produto produtoCurrent = produtoRepositoryPort.findAllById(produtoRecord.id());</b>
+<b class="fc">&nbsp;    if (Objects.isNull(produtoCurrent)) {</b>
+<b class="fc">&nbsp;      throw new ProdutoNotFoundException(&quot;Produto não encontrado com id: &quot; + produtoRecord.id());</b>
+&nbsp;    }
+<b class="fc">&nbsp;    produtoCurrent = produtoRecord.toEntity();</b>
+<b class="fc">&nbsp;    return produtoRepositoryPort.save(produtoCurrent);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public void delete(Long idProduto) {
+<b class="fc">&nbsp;    if (!produtoRepositoryPort.existsById(idProduto)) {</b>
+<b class="fc">&nbsp;      throw new ProdutoNotFoundException(&quot;Produto não encontrado com id: &quot; + idProduto);</b>
+&nbsp;    }
+<b class="fc">&nbsp;    produtoRepositoryPort.deleteById(idProduto);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Produto find(Long idProduto) {
+<b class="fc">&nbsp;    return produtoRepositoryPort.findAllById(idProduto);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public List&lt;Produto&gt; findAllProdutos(List&lt;Long&gt; idsProdutos) {
+<b class="fc">&nbsp;    return produtoRepositoryPort.findAllByIdIn(idsProdutos);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public void deleteAll() {
+<b class="fc">&nbsp;    produtoRepositoryPort.deleteAll();</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-05-27 22:09</div>
+</div>
+</body>
+</html>

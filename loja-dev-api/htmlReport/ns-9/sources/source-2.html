@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProdutoController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">loja.infrastructure.inbound.rest</a>
+</div>
+
+<h1>Coverage Summary for Class: ProdutoController (loja.infrastructure.inbound.rest)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProdutoController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62,5%
+  </span>
+  <span class="absValue">
+    (5/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,7%
+  </span>
+  <span class="absValue">
+    (22/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package loja.infrastructure.inbound.rest;
+&nbsp;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import loja.application.usecases.ProdutoUC;
+&nbsp;import loja.domain.produto.Produto;
+&nbsp;import loja.infrastructure.exceptions.ProdutoNotFoundException;
+&nbsp;import loja.infrastructure.inbound.record.ProdutoRecord;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;categorias/{idCategoria}/produtos&quot;)
+&nbsp;public class ProdutoController {
+&nbsp;
+<b class="fc">&nbsp;  private static final Logger logger = LoggerFactory.getLogger(ProdutoController.class);</b>
+&nbsp;  private final ProdutoUC produtoUC;
+&nbsp;
+<b class="fc">&nbsp;  public ProdutoController(ProdutoUC produtoUC) {</b>
+<b class="fc">&nbsp;    this.produtoUC = produtoUC;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @PostMapping()
+&nbsp;  public ResponseEntity&lt;Produto&gt; create(@Valid @RequestBody ProdutoRecord produtoRecord) {
+<b class="fc">&nbsp;    logger.info(&quot;Criando produto: {}&quot;, produtoRecord);</b>
+<b class="fc">&nbsp;    Produto produto = produtoUC.create(produtoRecord);</b>
+<b class="pc">&nbsp;    return Objects.nonNull(produto) ? ResponseEntity.status(HttpStatus.CREATED).body(produto)</b>
+<b class="nc">&nbsp;      : ResponseEntity.badRequest().build();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @PutMapping()
+&nbsp;  public ResponseEntity&lt;Produto&gt; update(@Valid @RequestBody ProdutoRecord produtoRecord) {
+<b class="fc">&nbsp;    Produto produto = produtoUC.update(produtoRecord);</b>
+<b class="fc">&nbsp;    logger.info(&quot;Atualizando produto: {}&quot;, produtoRecord);</b>
+<b class="pc">&nbsp;    return Objects.nonNull(produto) ? ResponseEntity.ok().body(produto)</b>
+<b class="nc">&nbsp;      : ResponseEntity.badRequest().build();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(&quot;/{idProduto}&quot;)
+&nbsp;  public ResponseEntity&lt;Produto&gt; find(@PathVariable Long idProduto) {
+<b class="fc">&nbsp;    logger.info(&quot;Buscando produto: {}&quot;, idProduto);</b>
+<b class="fc">&nbsp;    Produto produto = produtoUC.find(idProduto);</b>
+<b class="fc">&nbsp;    if (produto != null) {</b>
+<b class="fc">&nbsp;      return ResponseEntity.ok().body(produto);</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      throw new ProdutoNotFoundException(&quot;Produto não encontrado para o id: &quot; + idProduto);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(&quot;/all&quot;)
+&nbsp;  public ResponseEntity&lt;List&lt;Produto&gt;&gt; findAll(@RequestParam List&lt;Long&gt; idsProdutos) {
+<b class="fc">&nbsp;    logger.info(&quot;Buscando todos os produtos: {}&quot;, idsProdutos);</b>
+<b class="fc">&nbsp;    List&lt;Produto&gt; produtos = produtoUC.findAllProdutos(idsProdutos);</b>
+<b class="pc">&nbsp;    return ResponseEntity.ok().body(produtos.isEmpty() ? Collections.emptyList() : produtos);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @DeleteMapping(&quot;/{idProduto}&quot;)
+&nbsp;  public ResponseEntity&lt;Void&gt; delete(@PathVariable Long idProduto) {
+<b class="fc">&nbsp;      logger.info(&quot;Excluindo produto: {}&quot;, idProduto);</b>
+<b class="fc">&nbsp;      produtoUC.delete(idProduto);</b>
+<b class="fc">&nbsp;      return ResponseEntity.noContent().build();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @DeleteMapping(&quot;/deleteAll&quot;)
+&nbsp;  public ResponseEntity&lt;Void&gt; delete() {
+<b class="fc">&nbsp;      produtoUC.deleteAll();</b>
+<b class="fc">&nbsp;      return ResponseEntity.noContent().build();</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-05-27 22:09</div>
+</div>
+</body>
+</html>

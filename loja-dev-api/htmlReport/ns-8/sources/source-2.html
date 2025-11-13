@@ -1,0 +1,145 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProdutoRecord</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">loja.infrastructure.inbound.record</a>
+</div>
+
+<h1>Coverage Summary for Class: ProdutoRecord (loja.infrastructure.inbound.record)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProdutoRecord</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package loja.infrastructure.inbound.record;
+&nbsp;
+&nbsp;import jakarta.validation.constraints.DecimalMax;
+&nbsp;import jakarta.validation.constraints.DecimalMin;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;import jakarta.validation.constraints.Size;
+&nbsp;import loja.domain.categoria.Categoria;
+&nbsp;import loja.domain.produto.Produto;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;
+<b class="fc">&nbsp;public record ProdutoRecord(</b>
+&nbsp;
+&nbsp;  @NotNull(message = &quot;O campo id da Categoria é obrigatório&quot;)
+&nbsp;  Categoria categoria,
+&nbsp;
+&nbsp;  Long id,
+&nbsp;
+&nbsp;  @NotNull(message = &quot;O campo nome e? obrigato?rio&quot;)
+&nbsp;  @Size(max = 100)
+&nbsp;  String nome,
+&nbsp;
+&nbsp;  @NotNull(message = &quot;O campo preco e? obrigato?rio&quot;)
+&nbsp;  @DecimalMin(&quot;0.00&quot;)
+&nbsp;  @DecimalMax(&quot;9999999.99&quot;)
+&nbsp;  BigDecimal preco,
+&nbsp;
+&nbsp;  @Size(max = 100)
+&nbsp;  String descricao
+&nbsp;) {
+&nbsp;
+&nbsp;  public Produto toEntity() {
+<b class="fc">&nbsp;    Produto produto = new Produto();</b>
+<b class="fc">&nbsp;    produto.setCategoria(this.categoria);</b>
+<b class="fc">&nbsp;    produto.setId(this.id);</b>
+<b class="fc">&nbsp;    produto.setNome(this.nome);</b>
+<b class="fc">&nbsp;    produto.setPreco(this.preco);</b>
+<b class="fc">&nbsp;    produto.setDescricao(this.descricao);</b>
+<b class="fc">&nbsp;    return produto;</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-05-27 22:09</div>
+</div>
+</body>
+</html>

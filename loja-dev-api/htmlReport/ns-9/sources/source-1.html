@@ -1,0 +1,199 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CategoriaController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">loja.infrastructure.inbound.rest</a>
+</div>
+
+<h1>Coverage Summary for Class: CategoriaController (loja.infrastructure.inbound.rest)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CategoriaController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,1%
+  </span>
+  <span class="absValue">
+    (27/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package loja.infrastructure.inbound.rest;
+&nbsp;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import loja.application.usecases.CategoriaUC;
+&nbsp;import loja.domain.categoria.Categoria;
+&nbsp;import loja.infrastructure.exceptions.CategoriaNotFoundException;
+&nbsp;import loja.infrastructure.inbound.record.CategoriaRecord;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/categorias&quot;)
+&nbsp;public class CategoriaController {
+&nbsp;
+<b class="fc">&nbsp;  private static final Logger logger = LoggerFactory.getLogger(CategoriaController.class);</b>
+&nbsp;
+&nbsp;  private final CategoriaUC categoriaUC;
+&nbsp;
+<b class="fc">&nbsp;  public CategoriaController(CategoriaUC categoriaUC) {</b>
+<b class="fc">&nbsp;    this.categoriaUC = categoriaUC;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @PostMapping()
+&nbsp;  public ResponseEntity&lt;Categoria&gt; create(@Valid @RequestBody CategoriaRecord categoriaRecord) {
+<b class="fc">&nbsp;    logger.info(&quot;Criando categoria: {}&quot;, categoriaRecord);</b>
+<b class="fc">&nbsp;    Categoria categoria = categoriaUC.create(categoriaRecord);</b>
+<b class="pc">&nbsp;    return Objects.nonNull(categoria) ? ResponseEntity.status(HttpStatus.CREATED).body(categoria) :</b>
+<b class="nc">&nbsp;      ResponseEntity.badRequest().build();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @PutMapping()
+&nbsp;  public ResponseEntity&lt;Categoria&gt; update(@Valid @RequestBody CategoriaRecord categoriaRecord) {
+<b class="fc">&nbsp;    Categoria categoria = categoriaUC.update(categoriaRecord);</b>
+<b class="fc">&nbsp;    logger.info(&quot;Atualizando categoria: {}&quot;, categoriaRecord);</b>
+<b class="pc">&nbsp;    return Objects.nonNull(categoria) ? ResponseEntity.ok().body(categoria) :</b>
+<b class="nc">&nbsp;      ResponseEntity.badRequest().build();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(&quot;/{idCategoria}&quot;)
+&nbsp;  public ResponseEntity&lt;Categoria&gt; find(@Valid @PathVariable Long idCategoria) {
+<b class="fc">&nbsp;    logger.info(&quot;Buscando categoria: {}&quot;, idCategoria);</b>
+<b class="fc">&nbsp;    Categoria categoria = categoriaUC.find(idCategoria);</b>
+<b class="fc">&nbsp;    if (categoria != null) {</b>
+<b class="fc">&nbsp;      return ResponseEntity.ok().body(categoria);</b>
+&nbsp;    } else
+<b class="fc">&nbsp;      throw new CategoriaNotFoundException(&quot;Categoria não encontrada para o id: &quot; + idCategoria);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(&quot;/all&quot;)
+&nbsp;  public ResponseEntity&lt;List&lt;Categoria&gt;&gt; findAll(@Valid @RequestParam List&lt;Long&gt; idsCategorias) {
+<b class="fc">&nbsp;    logger.info(&quot;Buscando todas as categoria: {}&quot;, idsCategorias);</b>
+<b class="fc">&nbsp;    List&lt;Categoria&gt; categorias = categoriaUC.findAllCategorias(idsCategorias);</b>
+<b class="fc">&nbsp;    if (!categorias.isEmpty()) {</b>
+<b class="fc">&nbsp;      return ResponseEntity.ok().body(categorias);</b>
+&nbsp;    } else
+<b class="fc">&nbsp;      return ResponseEntity.ok(Collections.emptyList());</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @DeleteMapping(&quot;/{idCategoria}&quot;)
+&nbsp;  public ResponseEntity&lt;Void&gt; delete(@Valid @PathVariable Long idCategoria) {
+<b class="fc">&nbsp;    if (categoriaUC.existsCategoriaById(idCategoria)) {</b>
+<b class="fc">&nbsp;      logger.info(&quot;Excluindo categoria: {}&quot;, idCategoria);</b>
+<b class="fc">&nbsp;      categoriaUC.delete(idCategoria);</b>
+<b class="fc">&nbsp;      return ResponseEntity.noContent().build();</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      throw new CategoriaNotFoundException(&quot;Categoria não encontrada para o id: &quot; + idCategoria);</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @DeleteMapping(&quot;/deleteAll&quot;)
+&nbsp;  public ResponseEntity&lt;Void&gt; deleteAll() {
+<b class="fc">&nbsp;    logger.info(&quot;Excluindo todas as categorias&quot;);</b>
+<b class="fc">&nbsp;    categoriaUC.deleteAll();</b>
+<b class="fc">&nbsp;    return ResponseEntity.noContent().build();</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-05-27 22:09</div>
+</div>
+</body>
+</html>
